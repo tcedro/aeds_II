@@ -1,134 +1,138 @@
-//--------------------------arvore binaria----------------------------------//
+//--------------------------filar circular----------------------------------//
 
-//class arvore binaria - pesquisa
+//class fila circular
 
-class BinaryTree 
-{
-    public NodePers root;
-    public int height;
-    
-    public BinaryTree() {
-        this.root = null;
-        this.height = 0;
-    }
-    
-    public BinaryTree(NodePers root) {
-        this.root = root;
-        this.height++;
+class Queue{
+    private CellPers first;
+    private CellPers last;
+    private int length;
+    private int capacity;
+
+    public Queue(){
+        this(5);
     }
 
-    //inserir
-    public void insert(Personagem pers) throws Exception{
-        root = insert(pers, root);
-    }
-    
-    //inserir recursivo
-    public NodePers insert(Personagem pers, NodePers i) throws Exception {
-        if(i == null) { i = new NodePers(pers); }
-        else if( pers.compare(i.getElement()) < 0 ) {
-            i.left = insert(pers, i.left);
-        } 
-        else if( pers.compare(i.getElement()) > 0 ) {
-            i.right = insert(pers, i.right);
-        } else { throw new Exception("ERROR."); }
-        
-        return i;
+    public Queue(int capacity) {
+        this.first = this.last = null;
+        this.length = 0;
+        this.capacity = capacity;
     }
 
-    //pesquisar
-    public boolean search(String name) {
-        MyIO.print("raiz ");
-        return search(name, root);
+    public int length() {
+        return this.length;
     }
 
-    //persquisar recursivo
-    public boolean search(String name, NodePers i) {
-        boolean ans = false;
+    public void print() {
+        int i = 0;
 
-        if(i == null) ans = false; 
-        else if( name.compareTo(i.getElement().getNome() ) == 0 ) ans = true;
-        else if(name.compareTo(i.element.getNome()) < 0) { 
-            MyIO.print("esq ");
-            ans = search(name, i.left);
+        MyIO.println("[" + i++ + "] " + this.first.element.toString());
+        CellPers aux = this.first.next;
+
+        while(aux != this.first) {
+            MyIO.println("[" + i++ + "] " + aux.element.toString());
+            aux = aux.next;
         }
-        else {
-            MyIO.print("dir ");
-            ans = search(name, i.right);
-        }     
-        
-        // if(i == null) { ans = false; }
-        // else {
-        //     ans = ( ans ||  search(name, i.left) || search(name, i.right) );
-        // }
-        
-        return ans;
     }
 
-    //getters setters
-    public NodePers getRoot() {
-        return root;
-    }
-    public void setRoot(NodePers root) {
-        this.root = root;
-    }
-    public int getHeight() {
-        return height;
-    }
-    
-    public void setHeight(int height) {
-        this.height = height;
+    public void push(Personagem pers) {
+        if(this.length == this.capacity) this.pop();
+
+        CellPers tmp = new CellPers(pers);
+
+        if(this.first == null) {
+            this.first = tmp;
+        }else {
+            this.last.next = tmp;
+        }
+        
+        this.last = tmp;
+        this.last.next = this.first;
+        tmp = null;
+
+        this.length++;
     }
 
+    public Personagem pop() {
+        if(this.length > 0) {
+            Personagem game = this.first.element;
+
+            if(this.first == this.last) {
+                this.first = this.last = null;
+            }else {
+                this.first = this.first.next;
+                this.last.next = this.first;
+            }
+
+            this.length--;
+            
+            return game;
+        }
+
+        return null;
+    }
+
+    public Personagem get(int index) {
+        if(index >= 0 && index < this.length) {
+            int i = 0;
+            CellPers aux = this.first;
+            
+            while(aux.hasNext() && i < index) {
+                aux = aux.next;
+                i++;
+            }
+
+            Personagem pers = aux.element;
+            aux = null;
+            
+            return pers;
+        }
+
+        return null;
+    }
+
+    public int getMedia() {
+        float media = 0;
+        
+        if(this.length > 0) {
+            media += this.first.element.getAltura();
+            CellPers aux = this.first.next;
+
+            if(this.first != this.last) {
+                while(aux != this.first) {
+                    media += aux.element.getAltura();
+                    aux = aux.next;
+                }
+            }
+
+            media /= this.length;
+        }
+
+        return Math.round(media);
+    }
 }
 
 //----------------------------Celula Personagem------------------------------//
 
-class NodePers 
+class CellPers 
 {
     public Personagem element;
-    public NodePers left;
-    public NodePers right;
+    public CellPers next;
 
-    NodePers(Personagem pers) {
-        this(pers, null, null);
+    CellPers() {
+        this(null);
     }
     
-    NodePers(Personagem pers, NodePers left, NodePers right) {
+    CellPers(Personagem pers) {
         this.element = pers;
-        this.left = left;
-        this.right = right;
+        this.next = null;
     }
 
     public void setElement(Personagem element) {
         this.element = element;
     }
 
-    public boolean hasLeft(){
-        return this.left != null;
-    }
-
-    public boolean hasRight(){
-        return this.right != null;
-    }
-
-    public Personagem getElement() {
-        return element;
-    }
-
-    public NodePers getLeft() {
-        return left;
-    }
-
-    public NodePers getRight() {
-        return right;
-    }
-
-    public void setLeft(NodePers left) {
-        this.left = left;
-    }
-
-    public void setRight(NodePers right) {
-        this.right = right;
+    public boolean hasNext(){
+        return this.next != null;
     }
 }
 
@@ -229,13 +233,6 @@ class Personagem
         return " ## " + this.getNome() + " ## " + this.getAltura() + " ## " + this.getPeso() + " ## " + this.getCorDoCabelo()  +
          " ## " + this.getCorDaPele() + " ## " + this.getCorDosOlhos() + " ## " + this.getAnoNascimento() + " ## " +
          this.getGenero() + " ## " + this.getHomeWorld() + " ## ";
-    }
-
-    //compare
-    public int compare(Personagem pers2) {
-        int resp = -1;
-        if (pers2 != null) resp = this.getNome().compareTo(pers2.getNome());
-        return resp;
     }
 
 } 
@@ -438,6 +435,7 @@ class GerenciadorDeArquivo
     }
 }
 
+
 class Main 
 {
     //--------------------------------isFim--------------------------------//
@@ -445,20 +443,18 @@ class Main
     public static boolean isFim(String str) { return (str.length() == 3 && str.charAt(0) == 'F' && str.charAt(1) == 'I' && str.charAt(2) == 'M'); }
 
     //--------------------------------main----------------------------------//
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         MyIO.setCharset("utf-8");
         
-        //objetos
-        BinaryTree binTreePers = new BinaryTree();
+        Queue queuePers = new Queue(5);
         GerenciadorDeArquivo gerenciador = new GerenciadorDeArquivo(); 
-
-        //leitura de objetos (personagen)
+        
         do { 
             //ler caminho do arquivo
             gerenciador.caminhoArquivo = MyIO.readLine();
             if(isFim(gerenciador.caminhoArquivo)) break;
             
-            // cria-se referencia ao novo personagem
+            // cria-se referencia a novo personagem
             Personagem pers = new Personagem();
             
             //gerenciador ler valores do arquivo
@@ -466,21 +462,44 @@ class Main
             
             //set atributos do personagem
             gerenciador.setAtributosPersonagem(pers);
-
-            //personagem é inserido na arvore
-            binTreePers.insert(pers); 
-
-        } while (true);
-
-        //persquina na arvore
-        do { 
-            //ler nome de personagem a ser procurado
-            String nomePers = MyIO.readLine();
-            if(isFim(nomePers)) break;
             
-            MyIO.print(nomePers + ' ');
-            MyIO.println(binTreePers.search(nomePers)? "SIM":"NÃO");
+            //personagem é inserido a fila
+            queuePers.push(pers);
 
+            //print da media de altura
+            MyIO.println(queuePers.getMedia()); 
+           
         } while (true);
+
+//---------------------------------------------------------------------------------//
+
+        int numOp =  Integer.parseInt( MyIO.readLine() );
+        String tmp = "";
+
+        for (int k = 0; k < numOp; k++) {
+            tmp = MyIO.readLine();
+            String func = tmp.substring(0, 1);
+
+            //inserir            
+            if( func.compareTo("I") == 0) {
+                Personagem pers = new Personagem();
+                
+                gerenciador.caminhoArquivo = tmp.substring(tmp.indexOf(" ", 1) + 1, tmp.length());
+
+                gerenciador.lerArquivo();
+                gerenciador.setAtributosPersonagem(pers);
+            
+                //personagem é inserido a lista
+                queuePers.push(pers);
+
+                //printarmedia
+                MyIO.println( queuePers.getMedia() );
+            }
+
+            //remover
+            else { 
+                MyIO.println("(R) " + queuePers.pop().getNome() );
+            }
+        }
     }
 }
