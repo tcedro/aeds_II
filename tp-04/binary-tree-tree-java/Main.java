@@ -36,7 +36,7 @@ class BinaryTree
     //show Nodes printing left first
     public void showValues() {
         // mostrarPre(this.root);
-        mostrarCentral(root);
+        // mostrarCentral(root);
         // mostrarPos(root);
     }
 
@@ -56,91 +56,28 @@ class BinaryTree
         }
     }
 
-    // public void mostrarPos(Node i) {
-    //     if(i != null) {
-    //         mostrarPos(i.left);
-    //         mostrarPos(i.right);
-    //         MyIO.println(i.h_mod_15);
-    //     }
-    // }
+    public void mostrarPos(Node i) {
+        if(i != null) {
+            mostrarPos(i.left);
+            mostrarPos(i.right);
+            MyIO.println(i.h_mod_15);
+        }
+    }
 
-    // //search Node with height mod 15.
-    // public Node search(int x)  {
-    //     return  search(x, root);
+    //search Node with height mod 15.
+    public Node search(int x)  {
+        return  search(x, root);
         
-    // }
+    }
 
-    // //search Node with height mod 15. recursive
-    // public Node search(int x, Node i)  {
-    //     if(i == null) {
-    //         i = null;
-    //     }
-    //     else if (x == i.h_mod_15) {
-    //         return i;
-        
-    //     } else if(x < i.h_mod_15) {
-    //             i = search(x, i.left);
-    //     }
-    //     else {
-    //         i = search(x, i.right);
-    //     }
-    //     return i;
-    // }
-
-    // //search Personagen with name. in sub tree
-    // public boolean search(String namePers) {
-    //     MyIO.print("raiz ");
-    //     return search(namePers, root);
-    // }
-
-    // //search recursive with name
-    // public boolean search(String namePers, Node i) {
-    //     boolean resp;
-    //     if(i == null) {
-    //         resp = false;
-    //     }
-    //     else {
-    //         resp = sub_search(namePers, i);
-        
-    //         if(resp == false && i.hasLeft()) {
-    //             MyIO.print("esq ");
-    //             resp = search(namePers, i.left);
-    //         } 
-    //         else if(resp == false && i.hasRight()) {
-    //             MyIO.print("dir ");
-    //             resp = search(namePers, i.right);
-    //         }
-    //     }
-    //     return resp;
-    // }
-
-    // //sub search in second tree
-    // public boolean sub_search(String namePers, Node i) {
-    //     return sub_search(namePers, i.rootPers);
-    // }
-
-    // //sub search in second tree recursive
-    // public boolean sub_search(String namePers, NodePers i) {
-    //     boolean resp;
-        
-    //     if(i == null) {
-    //         resp = false;
-    //     }
-
-    //     else if(namePers.compareTo(i.element) == 0) {
-    //         resp = true;
-    //     }
-    //     else if(namePers.compareTo(i.element) < 0) {
-    //             MyIO.print("ESQ ");
-    //             resp = sub_search(namePers, i.left);
-    //     } 
-    //     else {
-    //             MyIO.print("DIR ");
-    //             resp = sub_search(namePers, i.right);
-    //         }
-
-    //     return resp;
-    // }
+    //search Node with height mod 15. recursive
+    public Node search(int x, Node i)  {
+        if(i == null)               { i = null; }
+        else if (x == i.h_mod_15)   { return i; } 
+        else if(x < i.h_mod_15)     { i = search(x, i.left); }
+        else { i = search(x, i.right); }
+        return i;
+    }
 
     //insert
     public void insert(int x) {
@@ -149,9 +86,9 @@ class BinaryTree
 
     //insert recursive
     public Node insert(int x, Node i) {
-        if (i == null) { i = new Node(x); } 
-        else if(x < i.h_mod_15 ) {   i.left = insert(x, i.left ); }
-        else if(x > i.h_mod_15 ) {  i.right = insert(x, i.right); }
+        if (i == null) { i = new Node(x);  } 
+        else if(x < i.h_mod_15 ) {   i.left = insert(x, i.left );  }
+        else if(x > i.h_mod_15 ) {   i.right = insert(x, i.right); }
         return i;
     }
 
@@ -161,6 +98,7 @@ class BinaryTree
         insert_pers(h_mod, pers, root);
     }
 
+    //walkin in first tree
     public void insert_pers(int h_mod, Personagem pers, Node i) {
         if(i != null) {
             if(i.h_mod_15 == h_mod) { i.rootPers = insert_pers(pers, i.rootPers); }
@@ -169,6 +107,7 @@ class BinaryTree
         }
     }
 
+    //walkin in second tree
     public NodePers insert_pers(Personagem pers, NodePers i) {
         if(i == null) { i = new NodePers(pers); } 
         else if( pers.getNome().compareTo(i.element) < 0 ) { i.left = insert_pers(pers, i.left);   } 
@@ -177,71 +116,35 @@ class BinaryTree
         return i;
     }
 
+    //search element in second tree
     public boolean search_pers(String name) {
-        MyIO.print("raiz");
+        MyIO.print("raiz ");
         return search_pers(name, root);
-
     }
 
+    //walkin in first tree
     public boolean search_pers(String name, Node i) {
-        boolean resp;
-        if(i == null) { resp = false; }
-        else {
+        boolean resp = false;
+        if(i != null) {
             resp = search_pers(name, i.rootPers);
-            if(resp == false) {
-                MyIO.print("esq ");
-                resp = search_pers(name, i.left);
-            } else if(resp == false) {
-                MyIO.print("dir ");
-                resp = search_pers(name, i.right);
-            }
+            if(resp == false) { MyIO.print("esq ");  resp = search_pers(name, i.left);  }
+            if(resp == false) {  MyIO.print("dir "); resp = search_pers(name, i.right); }
+        }
+       
+        return resp;
+    }
 
+    //walkin in second tree
+    public boolean search_pers(String name, NodePers i) {
+        boolean resp = false;
+        if(i != null) {
+            if(name.compareTo(i.element) == 0) { resp = true; return resp; }
+            { MyIO.print("ESQ "); search_pers(name, i.left);  }
+            { MyIO.print("DIR "); search_pers(name, i.right); }
         }
         
         return resp;
     }
-
-    public boolean search_pers(String name, NodePers i) {
-        boolean resp = false;
-        if (i != null) {
-            if(i.element.equals(name)) {
-                resp = true;
-            }else if(i.element.compareTo(name) < 0) {
-                MyIO.print("ESQ ");
-                resp = search_pers(name, i.left);
-            }
-            else if(i.element.compareTo(name) > 0) {
-                MyIO.print("DIR ");
-                resp = search_pers(name, i.right);
-            }
-        }
-        return resp;
-    }
-
-    // //sub insert in tree personagens
-    // public void sub_insert(Personagem pers) {
-    //     sub_insert(pers, root);
-    // }
-
-    // public void sub_insert(Personagem pers, Node i) {
-    //     int h_mod = pers.getAltura() % 15;
-    //     if(h_mod < i.h_mod_15) {
-    //         sub_insert(pers, i.left);
-    //     }
-    //     else if(h_mod > i.h_mod_15) {
-    //         sub_insert(pers, i.right);
-    //     } else {
-    //         i.rootPers = sub_insert(pers, i.rootPers);
-    //     }
-    // }
-
-    // //sub insert in tree personagens recursive
-    // private NodePers sub_insert(Personagem pers, NodePers i) {
-    //     if(i == null) { i = new NodePers(pers); } 
-    //     else  if( pers.getNome().compareTo(i.element) < 0 )   { i.left = sub_insert(pers, i.left);  }
-    //     else if ( pers.getNome().compareTo(i.element) > 0 )   { i.right = sub_insert(pers, i.right); }
-    //     return i;
-    // }
 
     public void sub_caminhar() {
         sub_caminhar(root);
@@ -257,26 +160,12 @@ class BinaryTree
 
     public void sub_caminhar(NodePers i) {
         if(i != null) {
-            MyIO.println("Name pers inserido: " + i.element);
+            MyIO.println(i.element);
             sub_caminhar(i.left);
             sub_caminhar(i.right);
         }
     }
 
-    // //to string 
-    // public void print(){
-    //     print(root);
-    // }
-
-    // //print recursive
-    // public void print(Node i) {
-    //     if(i != null) {
-    //         MyIO.println("h: "+ i.h_mod_15);
-    //         print(i.left);
-    //         print(i.right);
-    //     } 
-    // }
-    
 }
 /**
  * @version v0.1
@@ -678,17 +567,18 @@ class Main
 
         } while (true);
         // binTreePers.caminhar();
+        // binTreePers.sub_caminhar();
 
 
-        //persquina na arvore
-        // do { 
-        //     //ler nome de personagem a ser procurado
-        //     String nomePers = MyIO.readLine();
-        //     if(isFim(nomePers)) break;
+        // persquina na arvore
+        do { 
+            //ler nome de personagem a ser procurado
+            String nomePers = MyIO.readLine();
+            if(isFim(nomePers)) break;
             
-        //     MyIO.print(nomePers + ' ');
-        //     MyIO.println(binTreePers.search_pers(nomePers)? "SIM":"NÃO");
+            MyIO.print(nomePers + ' ');
+            MyIO.println(binTreePers.search_pers(nomePers)? "SIM":"NÃO");
 
-        // } while (true);
+        } while (true);
     }
 }
