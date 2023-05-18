@@ -35,7 +35,7 @@ class BinaryTree
 
     //show Nodes printing left first
     public void showValues() {
-        // mostrarPre(this.root);
+        mostrarPre(this.root);
         // mostrarCentral(root);
         // mostrarPos(root);
     }
@@ -128,7 +128,7 @@ class BinaryTree
         if(i != null) {
             resp = search_pers(name, i.rootPers);
             if(resp == false) { MyIO.print("esq ");  resp = search_pers(name, i.left);  }
-            if(resp == false) {  MyIO.print("dir "); resp = search_pers(name, i.right); }
+            if(resp == false) { MyIO.print("dir "); resp = search_pers(name, i.right); }
         }
        
         return resp;
@@ -138,9 +138,9 @@ class BinaryTree
     public boolean search_pers(String name, NodePers i) {
         boolean resp = false;
         if(i != null) {
-            if(name.compareTo(i.element) == 0) { resp = true; return resp; }
-            { MyIO.print("ESQ "); search_pers(name, i.left);  }
-            { MyIO.print("DIR "); search_pers(name, i.right); }
+            if(name.compareTo(i.element) == 0) { return true; }
+            if( resp == false ) { MyIO.print("ESQ "); resp = search_pers(name, i.left);  }
+            if( resp == false ) { MyIO.print("DIR "); resp = search_pers(name, i.right); }  
         }
         
         return resp;
@@ -548,7 +548,7 @@ class Main
         //inicializar valores do mod altura (balanceamento force brute)
         binTreePers.init_bin();
         // binTreePers.showValues();
-        binTreePers.sub_caminhar();
+        // binTreePers.sub_caminhar();
 
         //leitura de objetos (personagem)
         do { 
