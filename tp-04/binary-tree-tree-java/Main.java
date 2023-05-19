@@ -1,5 +1,6 @@
-//--------------------------arvore binaria----------------------------------//
-//class arvore binaria - pesquisa
+/**
+ * Arvore binaria de pesquisa
+ */
 class BinaryTree 
 {
     //atributes
@@ -67,15 +68,17 @@ class BinaryTree
     //search Node with height mod 15.
     public Node search(int x)  {
         return  search(x, root);
-        
     }
 
     //search Node with height mod 15. recursive
     public Node search(int x, Node i)  {
-        if(i == null)               { i = null; }
-        else if (x == i.h_mod_15)   { return i; } 
-        else if(x < i.h_mod_15)     { i = search(x, i.left); }
-        else { i = search(x, i.right); }
+        if(i == null)              { i = null; }
+        else if(x == i.h_mod_15)   { return i; } 
+        else if(x < i.h_mod_15)    { i = search(x, i.left); }
+        else { 
+            i = search(x, i.right); 
+        }
+        
         return i;
     }
 
@@ -86,7 +89,7 @@ class BinaryTree
 
     //insert recursive
     public Node insert(int x, Node i) {
-        if (i == null) { i = new Node(x);  } 
+        if(i == null) { i = new Node(x);  } 
         else if(x < i.h_mod_15 ) {   i.left = insert(x, i.left );  }
         else if(x > i.h_mod_15 ) {   i.right = insert(x, i.right); }
         return i;
@@ -190,8 +193,8 @@ class Node
     }
 
     //has
-    public boolean hasLeft()                    { return this.left != null; }
-    public boolean hasRight()                   { return this.right != null;}
+    public boolean hasLeft()   { return this.left != null; }
+    public boolean hasRight()  { return this.right != null;}
 }
 
 //----------------------------NodePers------------------------------//
@@ -501,7 +504,6 @@ class GerenciadorDeArquivo
         return altura; 
     }
     public double getPeso() { 
-        // double peso = Double.parseDouble(this.separarPeso() ); 
         double peso = this.separarPeso();
         return peso; 
     }
@@ -543,32 +545,27 @@ class Main
         
         //objetos
         BinaryTree binTreePers = new BinaryTree(7);
-        GerenciadorDeArquivo gerenciador = new GerenciadorDeArquivo(); 
+        GerenciadorDeArquivo file = new GerenciadorDeArquivo(); 
 
         //inicializar valores do mod altura (balanceamento force brute)
         binTreePers.init_bin();
-        // binTreePers.showValues();
-        // binTreePers.sub_caminhar();
 
         //leitura de objetos (personagem)
         do { 
             //ler caminho do arquivo
-            gerenciador.caminhoArquivo = MyIO.readLine();
-            if(isFim(gerenciador.caminhoArquivo)) break;
+            file.caminhoArquivo = MyIO.readLine();
+            if(isFim(file.caminhoArquivo)) break;
             
             // cria-se referencia ao novo personagem
             Personagem pers = new Personagem();
             
-            gerenciador.lerArquivo(); //gerenciador ler valores do arquivo
-            gerenciador.setAtributosPersonagem(pers); //set atributos do personagem
+            file.lerArquivo(); //file ler valores do arquivo
+            file.setAtributosPersonagem(pers); //set atributos do personagem
 
             //personagem é inserido na sub_arvore
             binTreePers.insert_pers(pers); 
 
         } while (true);
-        // binTreePers.caminhar();
-        // binTreePers.sub_caminhar();
-
 
         // persquina na arvore
         do { 
