@@ -1,37 +1,37 @@
 /**
  * Arvore binaria de pesquisa
  */
-class BinaryTree 
+class AVLtree 
 {
     //atributes
     public Node root;
     
     //constructor
-    BinaryTree() {
+    AVLtree() {
         root = null;
     }
 
     //constructor
-    BinaryTree(int x) {
+    AVLtree(int x) {
         root = new Node(x);
     }
 
     //inittiate data
     public void init_bin() {
-       this.insert(10);
-       this.insert(5);
-       this.insert(7);
+       this.insert(3);
+       this.insert(11);
        this.insert(1);
+       this.insert(5);
+       this.insert(9);
+       this.insert(12);
        this.insert(0);
+       this.insert(2);
+       this.insert(4);
+       this.insert(6);
        this.insert(8);
-    //    this.insert(0);
-    //    this.insert(2);
-    //    this.insert(4);
-    //    this.insert(6);
-    //    this.insert(8);
-    //    this.insert(10);
-    //    this.insert(13);
-    //    this.insert(14);
+       this.insert(10);
+       this.insert(13);
+       this.insert(14);
     }
 
     //show Nodes printing left first
@@ -179,6 +179,9 @@ class Node
     //atributes
     public int h_mod_15;
     
+    //factor
+    public int height;
+
     //ref of root from other tree
     public NodePers rootPers;
     public Node left;
@@ -203,6 +206,11 @@ class NodePers
 {
     //atributes
     public String element;
+    
+    //factor to balance
+    public int height;
+
+    //ref to left and right node
     public NodePers left;
     public NodePers right;
 
@@ -544,39 +552,38 @@ class Main
         MyIO.setCharset("utf-8");
         
         //objetos
-        BinaryTree binTreePers = new BinaryTree(2);
-        // GerenciadorDeArquivo file = new GerenciadorDeArquivo(); 
+        AVLtree avlTree = new AVLtree(7);
+        GerenciadorDeArquivo file = new GerenciadorDeArquivo(); 
 
         //inicializar valores do mod altura (balanceamento force brute)
-        binTreePers.init_bin();
-        binTreePers.showValues();
+        avlTree.init_bin();
 
-        // //leitura de objetos (personagem)
-        // do { 
-        //     //ler caminho do arquivo
-        //     file.caminhoArquivo = MyIO.readLine();
-        //     if(isFim(file.caminhoArquivo)) break;
+        //leitura de objetos (personagem)
+        do { 
+            //ler caminho do arquivo
+            file.caminhoArquivo = MyIO.readLine();
+            if(isFim(file.caminhoArquivo)) break;
             
-        //     // cria-se referencia ao novo personagem
-        //     Personagem pers = new Personagem();
+            // cria-se referencia ao novo personagem
+            Personagem pers = new Personagem();
             
-        //     file.lerArquivo(); //file ler valores do arquivo
-        //     file.setAtributosPersonagem(pers); //set atributos do personagem
+            file.lerArquivo(); //file ler valores do arquivo
+            file.setAtributosPersonagem(pers); //set atributos do personagem
 
-        //     //personagem é inserido na sub_arvore
-        //     binTreePers.insert_pers(pers); 
+            //personagem é inserido na sub_arvore
+            avlTree.insert_pers(pers); 
 
-        // } while (true);
+        } while (true);
 
-        // // persquina na arvore
-        // do { 
-        //     //ler nome de personagem a ser procurado
-        //     String nomePers = MyIO.readLine();
-        //     if(isFim(nomePers)) break;
+        // persquina na arvore
+        do { 
+            //ler nome de personagem a ser procurado
+            String nomePers = MyIO.readLine();
+            if(isFim(nomePers)) break;
             
-        //     MyIO.print(nomePers + ' ');
-        //     MyIO.println(binTreePers.search_pers(nomePers)? "SIM":"NÃO");
+            MyIO.print(nomePers + ' ');
+            MyIO.println(avlTree.search_pers(nomePers)? "SIM":"NÃO");
 
-        // } while (true);
+        } while (true);
     }
 }
