@@ -148,14 +148,15 @@ class AVLtree
         
         return resp;
     }
-
-
-    //simple rotate left
-    void rotateLeft() {
-        root = rotateLeft(root);
-    }
     
-    //simple rotate left
+    
+    /**
+     * First AVLtree rotate
+     * @param node
+     * @return leftNode
+     */
+    
+     //simple rotate left
     Node rotateLeft(Node node) {
         Node rightNode = node.right;
         Node rigLefNode = rightNode.left;
@@ -165,11 +166,6 @@ class AVLtree
 
         return rightNode;
     }
-    //simple rotate right
-    void rotateRight() {
-        root = rotateRight(root);
-    }
-
     //simple rotate right
     Node rotateRight(Node node) {
         Node leftNode = node.left;
@@ -181,7 +177,57 @@ class AVLtree
         return leftNode;
     }
 
+    //double rotate left-right
+    Node rotateLeftRight(Node node) {
+        node.left = rotateLeft(node.left);
+        return rotateRight(node);
+    }
 
+    //double rotate right-left
+    Node rotateRightLeft(Node node) {
+        node.right = rotateRight(node.right);
+        return rotateLeft(node);
+    }
+
+    /**
+     * Second AVl tree rotate
+     */
+
+    //simple rotate left
+    NodePers rotateLeft(NodePers node) {
+        NodePers rightNode = node.right;
+        NodePers rigLefNode = rightNode.left;
+
+        rightNode.left = node;
+        node.right = rigLefNode;
+
+        return rightNode;
+    }
+    
+    //simple rotate right
+    NodePers rotateRight(NodePers node) {
+        NodePers leftNode = node.left;
+        NodePers lefRigNode = leftNode.left;
+
+        leftNode.right = node;
+        node.left = lefRigNode;
+
+        return leftNode;
+    }
+
+    //double rotate left-right
+    NodePers rotateLeftRight(NodePers node) {
+        node.left = rotateLeft(node.left);
+        return rotateRight(node);
+    }
+
+    //double rotate right-left
+    NodePers rotateRightLeft(NodePers node) {
+        node.right = rotateRight(node.right);
+        return rotateLeft(node);
+    }
+
+    //sub caminhar segunda arvore
     public void sub_caminhar() {
         sub_caminhar(root);
     }
