@@ -131,7 +131,7 @@ class AVLtree
         if(i != null) {
             resp = search_pers(name, i.rootPers);
             if(resp == false) { MyIO.print("esq ");  resp = search_pers(name, i.left);  }
-            if(resp == false) { MyIO.print("dir "); resp = search_pers(name, i.right); }
+            if(resp == false) { MyIO.print("dir ");  resp = search_pers(name, i.right); }
         }
        
         return resp;
@@ -148,6 +148,39 @@ class AVLtree
         
         return resp;
     }
+
+
+    //simple rotate left
+    void rotateLeft() {
+        root = rotateLeft(root);
+    }
+    
+    //simple rotate left
+    Node rotateLeft(Node node) {
+        Node rightNode = node.right;
+        Node rigLefNode = rightNode.left;
+
+        rightNode.left = node;
+        node.right = rigLefNode;
+
+        return rightNode;
+    }
+    //simple rotate right
+    void rotateRight() {
+        root = rotateRight(root);
+    }
+
+    //simple rotate right
+    Node rotateRight(Node node) {
+        Node leftNode = node.left;
+        Node lefRigNode = leftNode.left;
+
+        leftNode.right = node;
+        node.left = lefRigNode;
+
+        return leftNode;
+    }
+
 
     public void sub_caminhar() {
         sub_caminhar(root);
@@ -179,7 +212,7 @@ class Node
     //atributes
     public int h_mod_15;
     
-    //factor
+    //factor to balance
     public int height;
 
     //ref of root from other tree
