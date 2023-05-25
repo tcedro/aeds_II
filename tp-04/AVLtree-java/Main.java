@@ -66,7 +66,7 @@ class AVL
             
             } else if(fator == 2) {
                 int fatorFilhoDir = node.getNivel(node.right.right) - node.getNivel(node.right.left);
-                if(fatorFilhoDir == -1) {
+                if( fatorFilhoDir == -1 ) {
                     node.right = rotateRight(node.right);
                 }
                 
