@@ -1,226 +1,38 @@
-/**
- * Arvore binaria de pesquisa
- */
-class AVLtree 
+class AVL 
 {
-    //atributes
-    public Node root;
+    public NodePers root;
+    public int height;
     
-    //constructor
-    AVLtree() {
-        root = null;
+    public AVL() {
+        this.root = null;
+        this.height = 0;
+    }
+    
+    public AVL(NodePers root) {
+        this.root = root;
+        this.height++;
     }
 
-    //constructor
-    AVLtree(int x) {
-        root = new Node(x);
+    //inserir
+    public void insert(Personagem pers) throws Exception{
+        root = insert(pers, root);
     }
-
-    //inittiate data
-    public void init_bin() {
-       this.insert(3);
-       this.insert(11);
-       this.insert(1);
-       this.insert(5);
-       this.insert(9);
-       this.insert(12);
-       this.insert(0);
-       this.insert(2);
-       this.insert(4);
-       this.insert(6);
-       this.insert(8);
-       this.insert(10);
-       this.insert(13);
-       this.insert(14);
-    }
-
-    //show Nodes printing left first
-    public void showValues() {
-        mostrarPre(this.root);
-        // mostrarCentral(root);
-        // mostrarPos(root);
-    }
-
-    public void mostrarPre(Node i) {
-        if(i != null) {
-            mostrarPre(i.left);
-            MyIO.println(i.h_mod_15);
-            mostrarPre(i.right);
-        }
-    }
-
-    public void mostrarCentral(Node i) {
-        if(i != null) {
-            MyIO.println(i.h_mod_15);
-            mostrarCentral(i.left);
-            mostrarCentral(i.right);
-        }
-    }
-
-    public void mostrarPos(Node i) {
-        if(i != null) {
-            mostrarPos(i.left);
-            mostrarPos(i.right);
-            MyIO.println(i.h_mod_15);
-        }
-    }
-
-    //search Node with height mod 15.
-    public Node search(int x)  {
-        return  search(x, root);
-    }
-
-    //search Node with height mod 15. recursive
-    public Node search(int x, Node i)  {
-        if(i == null)              { i = null; }
-        else if(x == i.h_mod_15)   { return i; } 
-        else if(x < i.h_mod_15)    { i = search(x, i.left); }
-        else { 
-            i = search(x, i.right); 
-        }
+    
+    //inserir recursivo
+    public NodePers insert(Personagem pers, NodePers i) throws Exception {
+        if(i == null) { i = new NodePers(pers); }
+        else if( pers.compare(i.getElement()) < 0 ) {
+            i.left = insert(pers, i.left);
         
-        return i;
-    }
-
-    //insert
-    public void insert(int x) {
-        root = insert(x, root);
-    }
-
-    //insert recursive
-    public Node insert(int x, Node i) {
-        if(i == null) { i = new Node(x);  } 
-        else if(x < i.h_mod_15 ) {   i.left = insert(x, i.left );  }
-        else if(x > i.h_mod_15 ) {   i.right = insert(x, i.right); }
-        //chamada para balancear tree
-        return balancear(i);
-    }
-
-    //insert pers
-    public void insert_pers(Personagem pers) {
-        int h_mod = (pers.getAltura() % 15);
-        insert_pers(h_mod, pers, root);
-    }
-
-    //walkin in first tree
-    public void insert_pers(int h_mod, Personagem pers, Node i) {
-        if(i != null) {
-            if(i.h_mod_15 == h_mod) { i.rootPers = insert_pers(pers, i.rootPers); }
-            else if(i.h_mod_15 > h_mod) { insert_pers(h_mod, pers, i.left);  }
-            else if(i.h_mod_15 < h_mod) { insert_pers(h_mod, pers, i.right); }
-        }
-    }
-
-    //walkin in second tree
-    public NodePers insert_pers(Personagem pers, NodePers i) {
-        if(i == null) { i = new NodePers(pers); } 
-        else if( pers.getNome().compareTo(i.element) < 0 ) { i.left = insert_pers(pers, i.left);   } 
-        else if( pers.getNome().compareTo(i.element) > 0 ) { i.right = insert_pers(pers, i.right); }
-        //balacear sub arvore
-        return balancear(i);
-    }
-
-    //search element in second tree
-    public boolean search_pers(String name) {
-        MyIO.print("raiz ");
-        return search_pers(name, root);
-    }
-
-    //walkin in first tree
-    public boolean search_pers(String name, Node i) {
-        boolean resp = false;
-        if(i != null) {
-            resp = search_pers(name, i.rootPers);
-            if(resp == false) { MyIO.print("esq ");  resp = search_pers(name, i.left);  }
-            if(resp == false) { MyIO.print("dir ");  resp = search_pers(name, i.right); }
-        }
-       
-        return resp;
-    }
-
-    //walkin in second tree
-    public boolean search_pers(String name, NodePers i) {
-        boolean resp = false;
-        if(i != null) {
-            if(name.compareTo(i.element) == 0) { return true; }
-            if( resp == false ) { MyIO.print("ESQ "); resp = search_pers(name, i.left);  }
-            if( resp == false ) { MyIO.print("DIR "); resp = search_pers(name, i.right); }  
-        }
-        
-        return resp;
-    }
-    
-    /**
-     * First AVLtree rotate
-     * @param node
-     * @return leftNode
-     */
-    
-    //simple rotate left
-    private Node rotateLeft(Node node) {
-        Node rightNode = node.right;
-        Node rigLefNode = rightNode.left;
-
-        rightNode.left = node;
-        node.right = rigLefNode;
-
-        return rightNode;
-    }
-    
-    //simple rotate right
-    private Node rotateRight(Node node) {
-        Node leftNode = node.left;
-        Node lefRigNode = leftNode.left;
-
-        leftNode.right = node;
-        node.left = lefRigNode;
-
-        return leftNode;
-    }
-
-    //double rotate left-right
-    private Node rotateLeftRight(Node node) {
-        node.left = rotateLeft(node.left);
-        return rotateRight(node);
-    }
-
-    //double rotate right-left
-    private Node rotateRightLeft(Node node) {
-        node.right = rotateRight(node.right);
-        return rotateLeft(node);
-    }
-    
-    //balancear
-    private Node balancear(Node node)  {
-        if(node != null) {
-            int fator = node.getNivel(node.right) - node.getNivel(node.left);
-            
-            //balanceada
-            if( Math.abs(fator) <= 1 ) {
-                node.setNivel();
-            } else if(fator == 2) {
-                int fatorFilhoDir = node.getNivel(node.right.right) - node.getNivel(node.right.left);
-                if(fatorFilhoDir == -1) {
-                    node.right = rotateRight(node.right);
-                }
-                node = rotateLeft(node);
-            }
-            
-            //se balanceada para esquerda
-            else if(fator == -2) {
-                int fatorFilhoEsq = node.getNivel(node.left.right) - node.getNivel(node.left.left);
-                //se o filho a esquerda tambem estiver desbalanceado
-                if(fatorFilhoEsq == 1) {
-                    node.left = rotateLeft(node.left);
-                }
-                node = rotateRight(node);
-            }
         } 
-        return node;
+        else if( pers.compare(i.getElement()) > 0 ) {
+            i.right = insert(pers, i.right);
+        
+        } else { throw new Exception("ERROR."); }
+        
+        return balance(i);
     }
-    /**
-     * Second AVl tree rotate
-     */
+    
     //simple rotate left
     private NodePers rotateLeft(NodePers node) {
         NodePers rightNode = node.right;
@@ -243,146 +55,110 @@ class AVLtree
         return leftNode;
     }
 
-    //double rotate left-right
-    private NodePers rotateLeftRight(NodePers node) {
-        node.left = rotateLeft(node.left);
-        return rotateRight(node);
-    }
-
-    //double rotate right-left
-    private NodePers rotateRightLeft(NodePers node) {
-        node.right = rotateRight(node.right);
-        return rotateLeft(node);
-    }
-
     //balancear
-    private NodePers balancear(NodePers node)  {
+    private NodePers balance(NodePers node)  {
         if(node != null) {
             int fator = node.getNivel(node.right) - node.getNivel(node.left);
             
             //balanceada
             if( Math.abs(fator) <= 1 ) {
                 node.setNivel();
+            
             } else if(fator == 2) {
                 int fatorFilhoDir = node.getNivel(node.right.right) - node.getNivel(node.right.left);
                 if(fatorFilhoDir == -1) {
                     node.right = rotateRight(node.right);
                 }
+                
                 node = rotateLeft(node);
             }
             
             //se balanceada para esquerda
             else if(fator == -2) {
                 int fatorFilhoEsq = node.getNivel(node.left.right) - node.getNivel(node.left.left);
+                
                 //se o filho a esquerda tambem estiver desbalanceado
                 if(fatorFilhoEsq == 1) {
                     node.left = rotateLeft(node.left);
                 }
+                
                 node = rotateRight(node);
             }
         } 
+        
         return node;
     }
 
-  
-
-    //sub caminhar segunda arvore
-    public void sub_caminhar() {
-        sub_caminhar(root);
+    //pesquisar
+    public boolean search(String name) {
+        MyIO.print("raiz ");
+        return search(name, root);
     }
 
-    public void sub_caminhar(Node i) {
-        if(i != null) {
-            sub_caminhar(i.left);
-            sub_caminhar(i.rootPers);
-            sub_caminhar(i.right);
+    //persquisar recursivo
+    public boolean search(String name, NodePers i) {
+        boolean ans = false;
+
+        if(i == null) ans = false; 
+        else if( name.compareTo(i.getElement().getNome() ) == 0 ) ans = true;
+        else if( name.compareTo(i.element.getNome()) < 0) { 
+            MyIO.print("esq ");
+            ans = search(name, i.left);
         }
+        else {
+            MyIO.print("dir ");
+            ans = search(name, i.right);
+        }     
+        
+        return ans;
     }
 
-    public void sub_caminhar(NodePers i) {
-        if(i != null) {
-            MyIO.println(i.element);
-            sub_caminhar(i.left);
-            sub_caminhar(i.right);
-        }
-    }
-
-}
-/**
- * @version v0.1
- * Class Node
-*/
-class Node 
-{
-    //atributes
-    public int h_mod_15;
+    //getters 
+    public int getHeight()    { return height; }
+    public NodePers getRoot() { return root;   }
     
-    //factor to balance
-    public int nivel;
+    //setters
+    public void setRoot(NodePers root) { this.root = root;     }
+    public void setHeight(int height)  { this.height = height; }
 
-    //ref of root from other tree
-    public NodePers rootPers;
-    public Node left;
-    public Node right;
-
-    Node(int height_mod) { this(height_mod, null, null); }
-    Node(int height_mod, Node left, Node right) {
-        h_mod_15 = height_mod;
-        this.left = left;
-        this.right = right;
-        rootPers = null;
-        this.nivel = 1;
-    }
-
-    //get
-    public void setNivel()         { this.nivel = 1 + Math.max(getNivel(left), getNivel(right)); }
-    //set
-    public int getNivel(Node node) { return (node == null) ? 0 : node.nivel; }
-    //has
-    public boolean hasLeft()   { return this.left != null; }
-    public boolean hasRight()  { return this.right != null;}
 }
 
-//----------------------------NodePers------------------------------//
+//----------------------------Celula Personagem------------------------------//
 
 class NodePers 
 {
-    //atributes
-    public String element;
-    
-    //factor to balance
-    public int nivel;
-
-    //ref to left and right node
+    public Personagem element;
     public NodePers left;
     public NodePers right;
+    public int nivel;
 
-    //constructors
-    NodePers(Personagem pers) { this(pers, null, null); }
-    NodePers(Personagem pers,
-             NodePers left, NodePers right) {
-        this.element = pers.getNome();
+    NodePers(Personagem pers) {
+        this(pers, null, null);
+    }
+    
+    NodePers(Personagem pers, NodePers left, NodePers right) {
+        this.element = pers;
         this.left = left;
         this.right = right;
-        this.nivel = 1;
     }
 
     //has
-    public boolean hasLeft()                    { return this.left != null; }
-    public boolean hasRight()                   { return this.right != null;}
-    
-    //getters
-    public String getElement()                  { return element; }
-    public NodePers   getLeft()                 { return left; }
-    public NodePers   getRight()                { return right; }
-    public int getNivel(NodePers node)          { return (node == null) ? 0 : node.nivel; }
+    public boolean hasLeft()  { return this.left != null;  }
+    public boolean hasRight() { return this.right != null; }
 
+    //getters
+    public Personagem getElement() { return element; }
+    public NodePers getLeft()      { return left; }
+    public NodePers getRight()     { return right; }
+    public int getNivel(NodePers node) { return (node == null) ? 0 : node.nivel; }
+    
     //setters
     public void setLeft(NodePers left)          { this.left = left; }
     public void setRight(NodePers right)        { this.right = right; }
-    public void setElement(Personagem element)  { this.element = element.getNome(); }
-    public void setNivel() /*Calcular nvl */    { this.nivel = 1 + Math.max(getNivel(left), getNivel(right)); }
+    public void setNivel()                      { this.nivel = 1 + Math.max(getNivel(left), getNivel(right)); }
+    public void setElement(Personagem element)  { this.element = element; }
 }
+
 //-------------------------------Personagem ----------------------------------//
 
 class Personagem 
@@ -421,15 +197,15 @@ class Personagem
     */
     Personagem(String nome, int altura, double peso, String corDoCabelo, String corDaPele,
               String corDosOlhos, String anoNascimento, String genero, String homeworld) {
-        this.nome               = nome; 
-        this.altura             = altura;
-        this.peso               = peso; 
-        this.corDoCabelo        = corDoCabelo;
-        this.CorDaPele          = corDaPele;
-        this.corDosOlhos        = corDosOlhos;
-        this.anoNascimento      = anoNascimento;
-        this.genero             = genero;
-        this.homeworld          = homeworld;
+        this.nome = nome; 
+        this.altura = altura;
+        this.peso = peso; 
+        this.corDoCabelo = corDoCabelo;
+        this.CorDaPele = corDaPele;
+        this.corDosOlhos = corDosOlhos;
+        this.anoNascimento = anoNascimento;
+        this.genero = genero;
+        this.homeworld = homeworld;
     }
 
     //----------------------------getters----------------------------------//
@@ -488,6 +264,7 @@ class Personagem
         if (pers2 != null) resp = this.getNome().compareTo(pers2.getNome());
         return resp;
     }
+
 } 
 //----------------------------GerenciadorDeArquivo-----------------------------//
 
@@ -698,13 +475,10 @@ class Main
         MyIO.setCharset("utf-8");
         
         //objetos
-        AVLtree avlTree = new AVLtree(7);
+        AVL avlPers = new AVL();
         GerenciadorDeArquivo file = new GerenciadorDeArquivo(); 
 
-        //inicializar valores do mod altura (balanceamento force brute)
-        avlTree.init_bin();
-
-        //leitura de objetos (personagem)
+        //leitura de objetos (personagen)
         do { 
             //ler caminho do arquivo
             file.caminhoArquivo = MyIO.readLine();
@@ -713,22 +487,25 @@ class Main
             // cria-se referencia ao novo personagem
             Personagem pers = new Personagem();
             
-            file.lerArquivo(); //file ler valores do arquivo
-            file.setAtributosPersonagem(pers); //set atributos do personagem
+            //file ler valores do arquivo
+            file.lerArquivo();
+            
+            //set atributos do personagem
+            file.setAtributosPersonagem(pers);
 
-            //personagem é inserido na sub_arvore
-            avlTree.insert_pers(pers); 
+            //personagem é inserido na arvore
+            avlPers.insert(pers); 
 
         } while (true);
 
-        // persquina na arvore
+        //persquina na arvore
         do { 
             //ler nome de personagem a ser procurado
             String nomePers = MyIO.readLine();
             if(isFim(nomePers)) break;
             
             MyIO.print(nomePers + ' ');
-            MyIO.println(avlTree.search_pers(nomePers)? "SIM":"NÃO");
+            MyIO.println(avlPers.search(nomePers)? "SIM":"NÃO");
 
         } while (true);
     }
