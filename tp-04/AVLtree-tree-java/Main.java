@@ -156,7 +156,7 @@ class AVLtree
      * @return leftNode
      */
     
-     //simple rotate left
+    //simple rotate left
     Node rotateLeft(Node node) {
         Node rightNode = node.right;
         Node rigLefNode = rightNode.left;
@@ -166,6 +166,7 @@ class AVLtree
 
         return rightNode;
     }
+    
     //simple rotate right
     Node rotateRight(Node node) {
         Node leftNode = node.left;
