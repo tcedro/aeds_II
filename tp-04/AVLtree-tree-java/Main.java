@@ -92,7 +92,8 @@ class AVLtree
         if(i == null) { i = new Node(x);  } 
         else if(x < i.h_mod_15 ) {   i.left = insert(x, i.left );  }
         else if(x > i.h_mod_15 ) {   i.right = insert(x, i.right); }
-        return i;
+        //chamada para balancear tree
+        return balancear(i);
     }
 
     //insert pers
@@ -115,8 +116,8 @@ class AVLtree
         if(i == null) { i = new NodePers(pers); } 
         else if( pers.getNome().compareTo(i.element) < 0 ) { i.left = insert_pers(pers, i.left);   } 
         else if( pers.getNome().compareTo(i.element) > 0 ) { i.right = insert_pers(pers, i.right); }
-
-        return i;
+        //balacear sub arvore
+        return balancear(i);
     }
 
     //search element in second tree
@@ -149,7 +150,6 @@ class AVLtree
         return resp;
     }
     
-    
     /**
      * First AVLtree rotate
      * @param node
@@ -157,7 +157,7 @@ class AVLtree
      */
     
     //simple rotate left
-    Node rotateLeft(Node node) {
+    private Node rotateLeft(Node node) {
         Node rightNode = node.right;
         Node rigLefNode = rightNode.left;
 
@@ -168,7 +168,7 @@ class AVLtree
     }
     
     //simple rotate right
-    Node rotateRight(Node node) {
+    private Node rotateRight(Node node) {
         Node leftNode = node.left;
         Node lefRigNode = leftNode.left;
 
@@ -179,23 +179,50 @@ class AVLtree
     }
 
     //double rotate left-right
-    Node rotateLeftRight(Node node) {
+    private Node rotateLeftRight(Node node) {
         node.left = rotateLeft(node.left);
         return rotateRight(node);
     }
 
     //double rotate right-left
-    Node rotateRightLeft(Node node) {
+    private Node rotateRightLeft(Node node) {
         node.right = rotateRight(node.right);
         return rotateLeft(node);
     }
-
+    
+    //balancear
+    private Node balancear(Node node)  {
+        if(node != null) {
+            int fator = node.getNivel(node.right) - node.getNivel(node.left);
+            
+            //balanceada
+            if( Math.abs(fator) <= 1 ) {
+                node.setNivel();
+            } else if(fator == 2) {
+                int fatorFilhoDir = node.getNivel(node.right.right) - node.getNivel(node.right.left);
+                if(fatorFilhoDir == -1) {
+                    node.right = rotateRight(node.right);
+                }
+                node = rotateLeft(node);
+            }
+            
+            //se balanceada para esquerda
+            else if(fator == -2) {
+                int fatorFilhoEsq = node.getNivel(node.left.right) - node.getNivel(node.left.left);
+                //se o filho a esquerda tambem estiver desbalanceado
+                if(fatorFilhoEsq == 1) {
+                    node.left = rotateLeft(node.left);
+                }
+                node = rotateRight(node);
+            }
+        } 
+        return node;
+    }
     /**
      * Second AVl tree rotate
      */
-
     //simple rotate left
-    NodePers rotateLeft(NodePers node) {
+    private NodePers rotateLeft(NodePers node) {
         NodePers rightNode = node.right;
         NodePers rigLefNode = rightNode.left;
 
@@ -206,7 +233,7 @@ class AVLtree
     }
     
     //simple rotate right
-    NodePers rotateRight(NodePers node) {
+    private NodePers rotateRight(NodePers node) {
         NodePers leftNode = node.left;
         NodePers lefRigNode = leftNode.left;
 
@@ -217,16 +244,47 @@ class AVLtree
     }
 
     //double rotate left-right
-    NodePers rotateLeftRight(NodePers node) {
+    private NodePers rotateLeftRight(NodePers node) {
         node.left = rotateLeft(node.left);
         return rotateRight(node);
     }
 
     //double rotate right-left
-    NodePers rotateRightLeft(NodePers node) {
+    private NodePers rotateRightLeft(NodePers node) {
         node.right = rotateRight(node.right);
         return rotateLeft(node);
     }
+
+    //balancear
+    private NodePers balancear(NodePers node)  {
+        if(node != null) {
+            int fator = node.getNivel(node.right) - node.getNivel(node.left);
+            
+            //balanceada
+            if( Math.abs(fator) <= 1 ) {
+                node.setNivel();
+            } else if(fator == 2) {
+                int fatorFilhoDir = node.getNivel(node.right.right) - node.getNivel(node.right.left);
+                if(fatorFilhoDir == -1) {
+                    node.right = rotateRight(node.right);
+                }
+                node = rotateLeft(node);
+            }
+            
+            //se balanceada para esquerda
+            else if(fator == -2) {
+                int fatorFilhoEsq = node.getNivel(node.left.right) - node.getNivel(node.left.left);
+                //se o filho a esquerda tambem estiver desbalanceado
+                if(fatorFilhoEsq == 1) {
+                    node.left = rotateLeft(node.left);
+                }
+                node = rotateRight(node);
+            }
+        } 
+        return node;
+    }
+
+  
 
     //sub caminhar segunda arvore
     public void sub_caminhar() {
@@ -260,7 +318,7 @@ class Node
     public int h_mod_15;
     
     //factor to balance
-    public int height;
+    public int nivel;
 
     //ref of root from other tree
     public NodePers rootPers;
@@ -273,8 +331,13 @@ class Node
         this.left = left;
         this.right = right;
         rootPers = null;
+        this.nivel = 1;
     }
 
+    //get
+    public void setNivel()         { this.nivel = 1 + Math.max(getNivel(left), getNivel(right)); }
+    //set
+    public int getNivel(Node node) { return (node == null) ? 0 : node.nivel; }
     //has
     public boolean hasLeft()   { return this.left != null; }
     public boolean hasRight()  { return this.right != null;}
@@ -288,7 +351,7 @@ class NodePers
     public String element;
     
     //factor to balance
-    public int height;
+    public int nivel;
 
     //ref to left and right node
     public NodePers left;
@@ -301,6 +364,7 @@ class NodePers
         this.element = pers.getNome();
         this.left = left;
         this.right = right;
+        this.nivel = 1;
     }
 
     //has
@@ -311,11 +375,13 @@ class NodePers
     public String getElement()                  { return element; }
     public NodePers   getLeft()                 { return left; }
     public NodePers   getRight()                { return right; }
-    
+    public int getNivel(NodePers node)          { return (node == null) ? 0 : node.nivel; }
+
     //setters
     public void setLeft(NodePers left)          { this.left = left; }
     public void setRight(NodePers right)        { this.right = right; }
     public void setElement(Personagem element)  { this.element = element.getNome(); }
+    public void setNivel() /*Calcular nvl */    { this.nivel = 1 + Math.max(getNivel(left), getNivel(right)); }
 }
 //-------------------------------Personagem ----------------------------------//
 
