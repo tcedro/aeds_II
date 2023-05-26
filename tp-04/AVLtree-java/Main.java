@@ -14,7 +14,7 @@ class AVL
     }
 
     //inserir
-    public void insert(Personagem pers) throws Exception{
+    public void insert(Personagem pers) throws Exception {
         root = insert(pers, root);
     }
     
@@ -272,23 +272,23 @@ class GerenciadorDeArquivo
 {
     //------------------------------atributos-----------------------------------//
 
-    public String caminhoArquivo;
-    public String conteudoArquivo;
+    public String path;
+    public String contentFile;
 
     //------------------------------lerArquivo---------------------------------//
     
     public void lerArquivo() {
-        Arq.openRead(this.caminhoArquivo);
-        this.conteudoArquivo = Arq.readLine();
+        Arq.openRead(this.path);
+        this.contentFile = Arq.readLine();
         Arq.close();
     }
 
     //---------------------------Separar-valor-do-Nome------------------------//
     public String separarNome() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'name'") + 9;
+        int indiceDoAtributo = this.contentFile.indexOf("'name'") + 9;
         String name = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            name += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            name += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         
@@ -298,10 +298,10 @@ class GerenciadorDeArquivo
     //-----------------------------Separar-Altura----------------------------//
 
     public String separarAltura() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'height'") + 11;
+        int indiceDoAtributo = this.contentFile.indexOf("'height'") + 11;
         String altura = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            altura += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            altura += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         if(altura.equals("unknown")) altura = "0";
@@ -309,16 +309,16 @@ class GerenciadorDeArquivo
     }
 
     public int separarPeso() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'mass'") + 9;
+        int indiceDoAtributo = this.contentFile.indexOf("'mass'") + 9;
         String peso = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            if (conteudoArquivo.charAt(indiceDoAtributo) == ',') {
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            if (contentFile.charAt(indiceDoAtributo) == ',') {
                 peso += '.'; 
                 indiceDoAtributo++;
                 continue;
             }
             
-            peso += conteudoArquivo.charAt(indiceDoAtributo);
+            peso += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         if (peso.equals("unknown")) {
@@ -336,10 +336,10 @@ class GerenciadorDeArquivo
     //---------------------------Separar-Cor-Do-Cabelo----------------------//
 
     public String separarCorDoCabelo() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'hair_color'") + 15;
+        int indiceDoAtributo = this.contentFile.indexOf("'hair_color'") + 15;
         String corDoCabelo = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            corDoCabelo += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            corDoCabelo += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return corDoCabelo;
@@ -348,10 +348,10 @@ class GerenciadorDeArquivo
     //-----------------------separar-cor-da-pele-------------------------//
 
     public String separarCorDaPele() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'skin_color'") + 15;
+        int indiceDoAtributo = this.contentFile.indexOf("'skin_color'") + 15;
         String corDaPele = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            corDaPele += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            corDaPele += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return corDaPele;
@@ -360,10 +360,10 @@ class GerenciadorDeArquivo
     //-----------------------separar-cor-dos-olhos-------------------//
 
     public String separarCorDosOlhos() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'eye_color'") + 14;
+        int indiceDoAtributo = this.contentFile.indexOf("'eye_color'") + 14;
         String corDosOlhos = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            corDosOlhos += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            corDosOlhos += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return corDosOlhos;
@@ -372,10 +372,10 @@ class GerenciadorDeArquivo
     //-----------------------data-de-nascimento---------------------//
 
     public String separarDataNascimento() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'birth_year'") + 15;
+        int indiceDoAtributo = this.contentFile.indexOf("'birth_year'") + 15;
         String dataNascimento = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            dataNascimento += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            dataNascimento += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return dataNascimento;
@@ -384,10 +384,10 @@ class GerenciadorDeArquivo
     //------------------------separar-genero-----------------------//
     
     public String separarGenero() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'gender'") + 11;
+        int indiceDoAtributo = this.contentFile.indexOf("'gender'") + 11;
         String genero = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            genero += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            genero += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return genero;
@@ -396,19 +396,21 @@ class GerenciadorDeArquivo
     //----------------------separar-homeworld---------------------//
 
     public String separarHomeworld() {
-        int indiceDoAtributo = this.conteudoArquivo.indexOf("'homeworld'") + 14;
+        int indiceDoAtributo = this.contentFile.indexOf("'homeworld'") + 14;
         String homeworld = "";
-        while (this.conteudoArquivo.charAt(indiceDoAtributo) != 39) {
-            homeworld += conteudoArquivo.charAt(indiceDoAtributo);
+        while (this.contentFile.charAt(indiceDoAtributo) != 39) {
+            homeworld += contentFile.charAt(indiceDoAtributo);
             indiceDoAtributo++;
         }
         return homeworld;
     }
 
+    //----------------------set atributos personagem--------------------------//
+
     public void setAtributosPersonagem(Personagem pers) {
         pers.setNome           ( this.separarNome() );
         pers.setAltura         ( Integer.parseInt( this.separarAltura() ));
-        pers.setPeso           (this.getPeso());
+        pers.setPeso           ( this.getPeso() );
         pers.setCorDaPele      ( this.separarCorDaPele() );
         pers.setCorDoCabelo    ( this.separarCorDoCabelo() );
         pers.setCorDosOlhos    ( this.separarCorDosOlhos() );
@@ -420,8 +422,8 @@ class GerenciadorDeArquivo
 
     //------------------------------setters-------------------------------//
     
-    public void setCaminhoArquivo(String caminho) {
-        this.caminhoArquivo = caminho;
+    public void setPathFile(String path) {
+        this.path = path;
     }
 
     //------------------------------getters-----------------------------------//
@@ -481,8 +483,8 @@ class Main
         //leitura de objetos (personagen)
         do { 
             //ler caminho do arquivo
-            file.caminhoArquivo = MyIO.readLine();
-            if(isFim(file.caminhoArquivo)) break;
+            file.path = MyIO.readLine();
+            if(isFim(file.path)) break;
             
             // cria-se referencia ao novo personagem
             Personagem pers = new Personagem();
@@ -493,7 +495,7 @@ class Main
             //set atributos do personagem
             file.setAtributosPersonagem(pers);
 
-            //personagem é inserido na arvore
+            //personagem é inserido na arvore avl
             avlPers.insert(pers); 
 
         } while (true);
