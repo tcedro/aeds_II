@@ -123,7 +123,7 @@ class AVL
 
 }
 
-//----------------------------Celula Personagem------------------------------//
+//----------------------------Node Personagem------------------------------//
 
 class NodePers 
 {
@@ -266,18 +266,18 @@ class Personagem
     }
 
 } 
-//----------------------------GerenciadorDeArquivo-----------------------------//
+//----------------------------FileManagement-----------------------------//
 
-class GerenciadorDeArquivo 
+class FileManagement
 {
     //------------------------------atributos-----------------------------------//
 
     public String path;
     public String contentFile;
 
-    //------------------------------lerArquivo---------------------------------//
+    //------------------------------readFile---------------------------------//
     
-    public void lerArquivo() {
+    public void readFile() {
         Arq.openRead(this.path);
         this.contentFile = Arq.readLine();
         Arq.close();
@@ -478,7 +478,7 @@ class Main
         
         //objetos
         AVL avlPers = new AVL();
-        GerenciadorDeArquivo file = new GerenciadorDeArquivo(); 
+        FileManagement file = new FileManagement(); 
 
         //leitura de objetos (personagen)
         do { 
@@ -490,7 +490,7 @@ class Main
             Personagem pers = new Personagem();
             
             //file ler valores do arquivo
-            file.lerArquivo();
+            file.readFile();
             
             //set atributos do personagem
             file.setAtributosPersonagem(pers);
