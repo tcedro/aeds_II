@@ -13,6 +13,18 @@ class AVL
         this.height++;
     }
 
+    //print
+    public void show() {
+        show_pre(root);
+    }
+    public void show_pre(NodePers i)  {
+        if(i != null) {
+            MyIO.println(i.element.getNome());
+            show_pre(i.left);
+            show_pre(i.right);
+        }
+    }
+
     //inserir
     public void insert(Personagem pers) throws Exception {
         root = insert(pers, root);
@@ -147,10 +159,10 @@ class NodePers
     public boolean hasRight() { return this.right != null; }
 
     //getters
-    public Personagem getElement() { return element; }
-    public NodePers getLeft()      { return left; }
-    public NodePers getRight()     { return right; }
-    public int getNivel(NodePers node) { return (node == null) ? 0 : node.nivel; }
+    public Personagem getElement()              { return element; }
+    public NodePers getLeft()                   { return left; }
+    public NodePers getRight()                  { return right; }
+    public int getNivel(NodePers node)   { return (node == null) ? 0 : node.nivel; }
     
     //setters
     public void setLeft(NodePers left)          { this.left = left; }
@@ -272,13 +284,13 @@ class FileManagement
 {
     //------------------------------atributos-----------------------------------//
 
-    public String path;
+    public String pathFile;
     public String contentFile;
 
     //------------------------------readFile---------------------------------//
     
     public void readFile() {
-        Arq.openRead(this.path);
+        Arq.openRead(this.pathFile);
         this.contentFile = Arq.readLine();
         Arq.close();
     }
@@ -422,8 +434,8 @@ class FileManagement
 
     //------------------------------setters-------------------------------//
     
-    public void setPathFile(String path) {
-        this.path = path;
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
     }
 
     //------------------------------getters-----------------------------------//
@@ -483,8 +495,8 @@ class Main
         //leitura de objetos (personagen)
         do { 
             //ler caminho do arquivo
-            file.path = MyIO.readLine();
-            if(isFim(file.path)) break;
+            file.pathFile = MyIO.readLine();
+            if(isFim(file.pathFile)) break;
             
             // cria-se referencia ao novo personagem
             Personagem pers = new Personagem();
@@ -500,6 +512,7 @@ class Main
 
         } while (true);
 
+        // avlPers.show();
         //persquina na arvore
         do { 
             //ler nome de personagem a ser procurado
