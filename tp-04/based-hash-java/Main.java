@@ -2,32 +2,54 @@
 class Hash 
 {
     public Personagem[] hashTable;
-    public int lenght;
-    public int reserve;
-    public int size;
+    public int acessArea;
+    public int acessReserve;
+    public int positionReserve;
+    public int totalSize;
 
+    //constructor
     public Hash(int len, int res) throws Exception{
         if(len >= 0 && res >= 0) {
-            size = len + res;
-            hashTable = new Personagem[size];
-            lenght = len;
-            reserve = res;    
+            totalSize = len + res;
+            hashTable = new Personagem[totalSize];
+            acessArea = len;
+            acessReserve = res;    
+            
+            for (int i = 0; i < totalSize; i++) { hashTable[i] = null; }
+            positionReserve = 0;
         
         } else { throw new Exception("ERROR VALUE INVALID."); }
     }
-
-
-    //getters
-    private int getHashCode(int persLen)    { return (persLen % 21); }
-    public Personagem[] getHashTable()      { return hashTable; }
-    public int getLenght()                  { return lenght; }
-    public Personagem peek(int pos)         { return hashTable[pos]; }
-    public int getReserve()                 { return reserve; }
     
-    //setters
-    public void setHashTable(Personagem[] hashTable)    { this.hashTable = hashTable; }
-    public void setLenght(int lenght)                   {  this.lenght = lenght; }
-    public void setReserve(int reserve)                 { this.reserve = reserve; }
+    private int getHashCode(int persLen)    { return (persLen % 21); }
+    
+    //insert
+    public boolean insert(Personagem pers) {
+        int hashCode = getHashCode( pers.getAltura() );
+        boolean resp = false;
+        
+        if( hashTable[hashCode] == null ) { hashTable[hashCode] = pers; resp = true; }
+        else if( positionReserve < acessReserve ) {
+            hashTable[positionReserve + acessReserve] = pers;
+            positionReserve++;
+            resp = true;
+
+        }
+
+
+        return resp;
+    }
+
+    public boolean search(String namePers) {
+        for (int i = 0; i < totalSize; i++) {
+            if( hashTable[i] != null )  { 
+                if(hashTable[i].getNome().compareTo(namePers) == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     
 }
 //-------------------------------Personagem ----------------------------------//
@@ -348,6 +370,7 @@ class Main
         MyIO.setCharset("utf-8");
         
         //objetos
+        Hash hashFormat = new Hash(21, 9);
         FileManagement file = new FileManagement(); 
 
         //leitura de objetos (personagen)
@@ -365,7 +388,8 @@ class Main
             //set atributos do personagem
             file.setAtributosPersonagem(pers);
 
-            //personagem é inserido na arvore avl
+            //personagem é inserido na tabela hash
+            hashFormat.insert(pers);
 
         } while (true);
 
@@ -377,6 +401,7 @@ class Main
             if(isFim(nomePers)) break;
             
             MyIO.print(nomePers + ' ');
+            MyIO.println(hashFormat.search(nomePers)? "SIM":"NAO");
 
         } while (true);
     }
