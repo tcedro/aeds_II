@@ -486,8 +486,6 @@ class Main
 
     //--------------------------------main----------------------------------//
     public static void main(String[] args) throws Exception {
-        MyIO.setCharset("utf-8");
-        
         //objetos
         AVL avlPers = new AVL();
         FileManagement file = new FileManagement(); 

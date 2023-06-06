@@ -544,8 +544,6 @@ class Main
 
     //--------------------------------main----------------------------------//
     public static void main(String[] args) throws Exception {
-        // MyIO.setCharset("utf-8");
-        
         //objetos
         RedBlack red_black_tree = new RedBlack();
         FileManagement file = new FileManagement(); 
