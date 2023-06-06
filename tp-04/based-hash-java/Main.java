@@ -10,7 +10,7 @@ class Hash
     //constructor
     public Hash(int len, int res) throws Exception{
         if(len >= 0 && res >= 0) {
-            totalSize = len + res;
+            totalSize = (len + res);
             hashTable = new Personagem[totalSize];
             acessArea = len;
             acessReserve = res;    
@@ -30,12 +30,11 @@ class Hash
         
         if( hashTable[hashCode] == null ) { hashTable[hashCode] = pers; resp = true; }
         else if( positionReserve < acessReserve ) {
-            hashTable[positionReserve + acessReserve] = pers;
+            hashTable[positionReserve + acessArea] = pers;
             positionReserve++;
             resp = true;
 
         }
-
 
         return resp;
     }
@@ -49,6 +48,20 @@ class Hash
             }
         }
         return false;
+    }
+
+    public void mostrarHash() {
+        int i = 0;
+        MyIO.println("size:" + this.totalSize);
+        MyIO.println("acessArea:" + this.acessArea);
+        MyIO.println("acessReserve:" + this.acessReserve);
+
+        while(i < this.totalSize) {
+            if(hashTable[i] != null) {
+                MyIO.println(i + " " + hashTable[i].getNome());
+            }
+            i++;
+        }
     }
     
 }
@@ -367,7 +380,7 @@ class Main
 
     //--------------------------------main----------------------------------//
     public static void main(String[] args) throws Exception {
-        MyIO.setCharset("utf-8");
+        // MyIO.setCharset("utf-8");
         
         //objetos
         Hash hashFormat = new Hash(21, 9);
@@ -393,15 +406,14 @@ class Main
 
         } while (true);
 
-        // avlPers.show();
-        //persquina na arvore
+        // persquina na arvore
         do { 
             //ler nome de personagem a ser procurado
             String nomePers = MyIO.readLine();
             if(isFim(nomePers)) break;
             
             MyIO.print(nomePers + ' ');
-            MyIO.println(hashFormat.search(nomePers)? "SIM":"NAO");
+            MyIO.println(hashFormat.search(nomePers)? "SIM":"NÃO");
 
         } while (true);
     }
