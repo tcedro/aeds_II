@@ -388,50 +388,32 @@ class Main
         Trie trieChar = new Trie();
         FileManagement file = new FileManagement(); 
 
-        //leitura de objetos (personagen)
         do { 
-            //ler caminho do arquivo
             file.pathFile = MyIO.readLine();
             if(isFim(file.pathFile)) break;
             
-            // cria-se referencia ao novo personagem
             Character pers = new Character ();
             
-            //file ler valores do arquivo
             file.readFile();
-            
-            //set atributos do personagem
             file.setAtributosPersonagem(pers);
 
-            //personagem é inserido na arvore avl
             trieChar.insert(pers.getNome()); 
 
         } while (true);
-         //leitura de objetos (personagen)
         do { 
-            //ler caminho do arquivo
             file.pathFile = MyIO.readLine();
             if(isFim(file.pathFile)) break;
             
-            // cria-se referencia ao novo personagem
             Character pers = new Character ();
             
-            //file ler valores do arquivo
             file.readFile();
-            
-            //set atributos do personagem
             file.setAtributosPersonagem(pers);
 
-            //personagem é inserido na arvore avl
             trieChar.insert(pers.getNome()); 
 
         } while (true);
 
-
-        // avlPers.show();
-        //persquina na arvore
         do { 
-            //ler nome de personagem a ser procurado
             String nomePers = MyIO.readLine();
             if(isFim(nomePers)) break;
             
