@@ -53,6 +53,9 @@ class AVL
         rightNode.left = node;
         node.right = rigLefNode;
 
+        node.setNivel();
+        rightNode.setNivel();
+
         return rightNode;
     }
     
@@ -63,6 +66,9 @@ class AVL
 
         leftNode.right = node;
         node.left = lefRigNode;
+
+        node.setNivel();
+        leftNode.setNivel();
 
         return leftNode;
     }
@@ -88,7 +94,6 @@ class AVL
             //se balanceada para esquerda
             else if(fator == -2) {
                 int fatorFilhoEsq = node.getNivel(node.left.right) - node.getNivel(node.left.left);
-                
                 //se o filho a esquerda tambem estiver desbalanceado
                 if(fatorFilhoEsq == 1) {
                     node.left = rotateLeft(node.left);
