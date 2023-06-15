@@ -3,56 +3,53 @@ class Hash
 {
     public CellPers[] hashTable;
     public int size;
-    
 
     public Hash(int size) {
         this.size = size;
         if(size >= 0){
-            this.hashTable = new  CellPers[size];
-            for (int i = 0; i < size; i++) {
-                this.hashTable[i] = null;
-            }
+            this.hashTable =  new CellPers[size];
         }
     } 
 
     private int getHashCode(int persLen)    { return (persLen % 25);  }
     
-    public boolean insert(Character pers) {
+    public void insert(Character pers) {
         int hashCode = getHashCode(pers.getAltura());
-
+        
         if(this.hashTable[hashCode] == null) {
-            this.hashTable[hashCode].setCharacter(pers);
-            return true;
+            hashTable[hashCode] = new CellPers(pers);
         
         } else {
-            if(this.hashTable[hashCode] != null) {
-                CellPers i;
-            
-                if(this.hashTable[hashCode].next == null) {
+            if( this.hashTable[hashCode].next == null ) {
                 this.hashTable[hashCode].next = new CellPers(pers);
+            
             } else {
-                for (i = this.hashTable[hashCode].next; i != null; i = i.next);
-                i.next = new CellPers(pers);
-
-            }
-                return true;
+                CellPers i;
+                for (i = this.hashTable[hashCode]; i != null; i = i.next);
+                i = new CellPers(pers);
+            
             }
         }
-           
-
-        return false;
     }
 
-    // public boolean search(String namePers) {
-    //     for (int i = 0; i < size; i++) {
-    //         if( hashTable[i] != null )  { 
-    //             if(hashTable[i].getNome().compareTo(namePers) == 0) {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
+    public boolean search(String namePers) {
+        boolean resp = false;
+        for (int i = 0; i < size; i++) {
+            if( hashTable[i] != null )  { 
+                if(hashTable[i].element.getNome().compareTo(namePers) == 0) {
+                    resp = true;
+                    
+                } else if( resp == false ) {
+                    for (CellPers x = hashTable[i]; x != null ; x = x.next) {
+                        if(x.element.getNome().compareTo(namePers) == 0) {
+                            resp = true;
+                        }
+                    }
+                }
+            }
+        }
+        return resp;
+    }
 
     public void showHashTable() {
         int i = 0;
@@ -85,7 +82,10 @@ class CellPers
     public Character element;
     public CellPers next;
 
-    CellPers() { this(null); }
+    CellPers() {             
+        element = null;
+        next = null;
+    }
     
     CellPers(Character pers) {
         this.element = pers;
@@ -99,7 +99,7 @@ class CellPers
 
 
 //-------------------------------Character ----------------------------------//
-
+//git funcionou
 class Character 
 {
     //----------------------------atributes----------------------------------//
@@ -431,17 +431,15 @@ class Main
 
         } while (true);
 
-        hashFormat.showHashTable();
-
-        // // persquina na arvore
-        // do { 
-        //     //ler nome de personagem a ser procurado
-        //     String nomePers = MyIO.readLine();
-        //     if(isFim(nomePers)) break;
+        // persquina na arvore
+        do { 
+            //ler nome de personagem a ser procurado
+            String nomePers = MyIO.readLine();
+            if(isFim(nomePers)) break;
             
-        //     MyIO.print(nomePers + ' ');
-        //     MyIO.println(hashFormat.search(nomePers)? "SIM":"NÃO");
+            MyIO.print(nomePers + ' ');
+            MyIO.println(hashFormat.search(nomePers)? "SIM":"NÃO");
 
-        // } while (true);
+        } while (true);
     }
 }
